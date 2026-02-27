@@ -2,7 +2,7 @@
 
 ## Project info
 Nikhil jha
-team mame- kira's Logic
+team name- kira's Logic
 
 URL -
 https://nikhiljha-kiraslogic.lovable.app
