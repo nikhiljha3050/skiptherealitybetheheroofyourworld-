@@ -1,213 +1,103 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Volume2, VolumeX, Menu, X } from 'lucide-react'
-import { useState, useRef, useEffect } from 'react'
+import { Menu, X } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 export function Hero() {
-  const [isMuted, setIsMuted] = useState(true)
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const videoRef = useRef<HTMLVideoElement>(null)
 
-  // Scroll detection
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY
-      setIsScrolled(scrollTop > 50) // Show background after 50px scroll
-    }
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 50)
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Ensure video is muted immediately on load to prevent any audio
   useEffect(() => {
-    if (videoRef.current) {
-      console.log('Video element found, setting up...')
-      videoRef.current.volume = 0
-      videoRef.current.muted = true
-      videoRef.current.defaultMuted = true
-      
-      // Add event listeners for debugging
-      videoRef.current.addEventListener('loadstart', () => console.log('Video: loadstart'))
-      videoRef.current.addEventListener('loadedmetadata', () => console.log('Video: loadedmetadata'))
-      videoRef.current.addEventListener('canplay', () => console.log('Video: canplay'))
-      videoRef.current.addEventListener('playing', () => console.log('Video: playing'))
-      videoRef.current.addEventListener('error', (e) => console.error('Video error:', e))
-      
-      // Force mute on play
-      videoRef.current.addEventListener('play', () => {
-        if (videoRef.current) {
-          console.log('Video play event fired')
-          videoRef.current.muted = isMuted
-          videoRef.current.volume = isMuted ? 0 : 0.7
-        }
-      })
-      
-      // Try to play the video
-      const playPromise = videoRef.current.play()
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => console.log('Video autoplay successful'))
-          .catch(error => console.error('Video autoplay failed:', error))
-      }
-    }
-  }, [])
-
-  // Update video mute state when isMuted changes
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.muted = isMuted
-      videoRef.current.volume = isMuted ? 0 : 0.7
-    }
-  }, [isMuted])
-
-  // Handle body scroll lock when mobile menu is open
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
-    }
-
-    // Cleanup on unmount
-    return () => {
-      document.body.style.overflow = 'unset'
-    }
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : 'unset'
+    return () => { document.body.style.overflow = 'unset' }
   }, [isMobileMenuOpen])
 
-  // Close mobile menu on scroll
   useEffect(() => {
-    const handleScroll = () => {
-      if (isMobileMenuOpen) {
-        setIsMobileMenuOpen(false)
-      }
-    }
-
-    if (isMobileMenuOpen) {
-      window.addEventListener('scroll', handleScroll)
-    }
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
+    if (!isMobileMenuOpen) return
+    const handleScroll = () => setIsMobileMenuOpen(false)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [isMobileMenuOpen])
 
-
+  const navLinks = [
+    { href: '#forge', label: 'The Forge' },
+    { href: '#pricing', label: 'Pricing' },
+    { href: '#contact', label: 'Contact' },
+  ]
 
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-black">
-      {/* MASSIVE VIDEO - Takes up 95% of space */}
-      <video
-        ref={videoRef}
-        className="absolute inset-0 w-full h-full object-cover scale-110"
-        autoPlay
-        muted
-        loop
-        playsInline
-      >
-        <source src="https://mojli.s3.us-east-2.amazonaws.com/Mojli+Website+upscaled+(12mb).webm" type="video/webm" />
-        Your browser does not support the video tag.
-      </video>
+    <div className="relative h-screen w-full overflow-hidden bg-background">
+      {/* Dark enchanted forest background */}
+      <div className="absolute inset-0">
+        <div
+          className="absolute inset-0 aurora-bg"
+          style={{
+            background: 'linear-gradient(135deg, #000000 0%, #050520 20%, #0a0a2e 40%, #0d0b1a 60%, #000000 100%)',
+          }}
+        />
+        {/* Bioluminescent particles */}
+        <div className="absolute top-[15%] left-[10%] w-2 h-2 rounded-full bioluminescent-float" style={{ background: 'var(--accent-cyan)', boxShadow: '0 0 20px var(--accent-cyan)' }} />
+        <div className="absolute top-[30%] right-[15%] w-3 h-3 rounded-full bioluminescent-float" style={{ background: 'var(--accent-purple)', boxShadow: '0 0 30px var(--accent-purple)', animationDelay: '2s' }} />
+        <div className="absolute top-[60%] left-[20%] w-1.5 h-1.5 rounded-full bioluminescent-float" style={{ background: 'var(--accent-gold)', boxShadow: '0 0 15px var(--accent-gold)', animationDelay: '4s' }} />
+        <div className="absolute top-[45%] right-[25%] w-2 h-2 rounded-full bioluminescent-float" style={{ background: 'var(--accent-cyan)', boxShadow: '0 0 20px var(--accent-cyan)', animationDelay: '1s' }} />
+        <div className="absolute bottom-[20%] left-[40%] w-2.5 h-2.5 rounded-full bioluminescent-float" style={{ background: 'var(--accent-magenta)', boxShadow: '0 0 25px var(--accent-magenta)', animationDelay: '3s' }} />
+        <div className="absolute top-[70%] right-[40%] w-1 h-1 rounded-full bioluminescent-float" style={{ background: 'var(--accent-cyan)', boxShadow: '0 0 12px var(--accent-cyan)', animationDelay: '5s' }} />
+        <div className="absolute top-[20%] left-[60%] w-1.5 h-1.5 rounded-full bioluminescent-float" style={{ background: 'var(--accent-purple)', boxShadow: '0 0 18px var(--accent-purple)', animationDelay: '6s' }} />
+        <div className="absolute bottom-[35%] right-[10%] w-2 h-2 rounded-full bioluminescent-float" style={{ background: 'var(--accent-gold)', boxShadow: '0 0 22px var(--accent-gold)', animationDelay: '7s' }} />
 
-      {/* Full-Width Navbar */}
+        {/* Magical aura gradient overlay */}
+        <div className="absolute inset-0" style={{
+          background: 'radial-gradient(ellipse at 30% 70%, rgba(0,240,255,0.05) 0%, transparent 50%), radial-gradient(ellipse at 70% 30%, rgba(168,85,247,0.05) 0%, transparent 50%)',
+        }} />
+      </div>
+
+      {/* Navbar */}
       <motion.nav
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3 }}
         className="fixed top-0 left-0 right-0 w-full z-[110]"
       >
-        <div 
-          className={`w-full px-6 sm:px-8 lg:px-12 py-4 transition-all duration-300 ease-out ${
-            isScrolled 
-              ? 'bg-black/80 backdrop-blur-xl border-b border-white/10' 
-              : 'bg-transparent'
-          }`}
-        >
+        <div className={`w-full px-6 sm:px-8 lg:px-12 py-4 transition-all duration-300 ease-out ${
+          isScrolled ? 'bg-black/80 backdrop-blur-xl border-b border-aether-cyan/10' : 'bg-transparent'
+        }`}>
           <div className="flex items-center justify-between">
-            {/* Logo */}
             <motion.div
               whileHover={{ scale: 1.05 }}
               className="flex items-center cursor-pointer"
-              onClick={() => {
-                window.scrollTo({ top: 0, behavior: 'smooth' })
-              }}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
-              <span className="font-bagel text-white text-xl tracking-wider">MOJJU</span>
+              <span className="font-orbitron text-aether-cyan text-xl tracking-[0.3em] font-bold">AETHER</span>
             </motion.div>
 
-            {/* Navigation Menu */}
             <div className="hidden md:flex items-center space-x-8">
-              <a 
-                href="#portfolio" 
-                className="text-white hover:text-white/80 font-medium gentle-animation hover:scale-105"
-              >
-                Work
-              </a>
-              <a 
-                href="#about" 
-                className="text-white hover:text-white/80 font-medium gentle-animation hover:scale-105"
-              >
-                Process
-              </a>
-              <a 
-                href="#services" 
-                className="text-white hover:text-white/80 font-medium gentle-animation hover:scale-105"
-              >
-                Capabilities
-              </a>
-              <a 
-                href="#team" 
-                className="text-white hover:text-white/80 font-medium gentle-animation hover:scale-105"
-              >
-                Team
-              </a>
-              <a 
-                href="#contact" 
-                className="text-white hover:text-white/80 font-medium gentle-animation hover:scale-105"
-              >
-                Contact
-              </a>
+              {navLinks.map(link => (
+                <a key={link.href} href={link.href} className="text-foreground/80 hover:text-aether-cyan font-medium gentle-animation hover:scale-105 text-sm tracking-wider uppercase">
+                  {link.label}
+                </a>
+              ))}
             </div>
 
-            {/* Right Side - Video Controls + CTA + Mobile Menu */}
-            <div className="flex items-center space-x-3 relative">
-              {/* Video Controls with Sound On indicator */}
-              <div className="relative">
-                <button
-                  onClick={() => setIsMuted(!isMuted)}
-                  className="glass-effect p-3 rounded-full text-white hover:bg-white/20 gentle-animation cursor-pointer"
-                >
-                  {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-                </button>
-                
-                {/* Sound On indicator - only show when muted */}
-                {isMuted && (
-                  <div className="absolute -bottom-10 right-0 flex items-center text-white/80">
-                    <span className="whitespace-nowrap font-medium text-sm mr-2">Sound On</span>
-                    <span className="text-lg">↗</span>
-                  </div>
-                )}
-              </div>
-              
-              {/* CTA Button - Hidden on mobile */}
+            <div className="flex items-center space-x-3">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  const contactSection = document.getElementById('contact')
-                  contactSection?.scrollIntoView({ behavior: 'smooth' })
-                }}
-                className="hidden sm:block bg-red-600 backdrop-blur-sm text-white font-semibold px-6 py-3 rounded-md hover:bg-red-700 gentle-animation ml-4 cursor-pointer"
+                onClick={() => document.getElementById('forge')?.scrollIntoView({ behavior: 'smooth' })}
+                className="hidden sm:block bg-aether-cyan/10 border border-aether-cyan/30 text-aether-cyan font-semibold px-6 py-3 rounded-md hover:bg-aether-cyan/20 hover:shadow-[0_0_30px_rgba(0,240,255,0.2)] gentle-animation cursor-pointer font-orbitron text-sm tracking-wider"
               >
-                Book a Call
+                Enter Wonderland
               </motion.button>
 
-              {/* Mobile Hamburger Menu Button */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="md:hidden glass-effect p-3 rounded-full text-white hover:bg-white/20 active:bg-white/30 gentle-animation cursor-pointer z-[120] relative"
+                className="md:hidden glass-effect p-3 rounded-full text-foreground hover:bg-aether-cyan/10 gentle-animation cursor-pointer z-[120] relative"
               >
                 {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
@@ -216,113 +106,100 @@ export function Hero() {
         </div>
       </motion.nav>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="md:hidden fixed inset-0 bg-black/50 backdrop-blur-md z-[80] cursor-pointer"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="md:hidden fixed inset-0 bg-black/60 backdrop-blur-md z-[80]" onClick={() => setIsMobileMenuOpen(false)} />
       )}
-
-      {/* Mobile Menu Panel */}
       <motion.div
         initial={{ x: '100%' }}
         animate={{ x: isMobileMenuOpen ? '0%' : '100%' }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        className="md:hidden fixed top-0 right-0 h-full w-72 max-w-[85vw] bg-black/90 backdrop-blur-xl border-l border-white/10 z-[90] mobile-menu-panel pointer-events-auto"
+        className="md:hidden fixed top-0 right-0 h-full w-72 max-w-[85vw] bg-black/95 backdrop-blur-xl border-l border-aether-cyan/10 z-[90]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-col h-full">
-          {/* Close Button at the top */}
           <div className="flex justify-end p-4">
-            <button
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="glass-effect p-3 rounded-full text-white hover:bg-white/20 active:bg-white/30 gentle-animation cursor-pointer"
-            >
+            <button onClick={() => setIsMobileMenuOpen(false)} className="glass-effect p-3 rounded-full text-foreground cursor-pointer">
               <X className="w-5 h-5" />
             </button>
           </div>
-          
-          <div className="flex flex-col px-6 pb-6 h-full">
-            {/* Mobile Navigation Links */}
-            <div className="flex flex-col space-y-4 text-white">
-              <a 
-                href="#portfolio" 
-                className="mobile-menu-link px-4 py-3 hover:text-white/80 hover:bg-white/10 rounded-lg gentle-animation font-medium text-lg active:bg-white/20"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Work
+          <div className="flex flex-col px-6 pb-6 space-y-4">
+            {navLinks.map(link => (
+              <a key={link.href} href={link.href} className="px-4 py-3 text-foreground hover:text-aether-cyan hover:bg-aether-cyan/5 rounded-lg font-medium text-lg tracking-wider" onClick={() => setIsMobileMenuOpen(false)}>
+                {link.label}
               </a>
-              <a 
-                href="#about" 
-                className="mobile-menu-link px-4 py-3 hover:text-white/80 hover:bg-white/10 rounded-lg gentle-animation font-medium text-lg active:bg-white/20"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Process
-              </a>
-              <a 
-                href="#services" 
-                className="mobile-menu-link px-4 py-3 hover:text-white/80 hover:bg-white/10 rounded-lg gentle-animation font-medium text-lg active:bg-white/20"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Capabilities
-              </a>
-              <a 
-                href="#team" 
-                className="mobile-menu-link px-4 py-3 hover:text-white/80 hover:bg-white/10 rounded-lg gentle-animation font-medium text-lg active:bg-white/20"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Team
-              </a>
-              <a 
-                href="#contact" 
-                className="mobile-menu-link px-4 py-3 hover:text-white/80 hover:bg-white/10 rounded-lg gentle-animation font-medium text-lg active:bg-white/20"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Contact
-              </a>
-            </div>
-
-            {/* Mobile CTA Button */}
+            ))}
             <motion.button
-              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                const contactSection = document.getElementById('contact')
-                contactSection?.scrollIntoView({ behavior: 'smooth' })
-                setIsMobileMenuOpen(false)
-              }}
-              className="bg-red-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-red-700 active:bg-red-800 gentle-animation mt-8 cursor-pointer"
+              onClick={() => { document.getElementById('forge')?.scrollIntoView({ behavior: 'smooth' }); setIsMobileMenuOpen(false) }}
+              className="bg-aether-cyan/10 border border-aether-cyan/30 text-aether-cyan font-semibold px-6 py-3 rounded-lg gentle-animation mt-4 cursor-pointer font-orbitron text-sm tracking-wider"
             >
-              Book a Call
+              Enter Wonderland
             </motion.button>
           </div>
         </div>
       </motion.div>
 
+      {/* Hero Content */}
+      <div className="absolute inset-0 flex items-center justify-center z-40">
+        <div className="text-center max-w-5xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.8 }}
+          >
+            <p className="font-orbitron text-aether-cyan/80 text-xs sm:text-sm tracking-[0.5em] uppercase mb-6">
+              Neuro-Haptic VR Technology
+            </p>
+          </motion.div>
 
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, delay: 1 }}
+            className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-black leading-[0.95] mb-8"
+          >
+            <span className="block text-foreground">YOUR FAIRYTALE</span>
+            <span className="block text-foreground">AWAITS.</span>
+            <span className="block mt-2" style={{
+              background: 'linear-gradient(135deg, var(--accent-cyan), var(--accent-purple), var(--accent-gold))',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundSize: '200% 200%',
+              animation: 'auroraShift 8s ease infinite',
+            }}>
+              REALITY IS OBSOLETE.
+            </span>
+          </motion.h1>
 
-      {/* Big Studio Title - Lower Left */}
-      <motion.div
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1, delay: 1.5 }}
-        className="absolute bottom-12 left-6 sm:left-8 lg:left-12 z-40"
-      >
-        <div className="max-w-2xl">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black leading-tight text-white">
-            <span className="block">AI FILM</span>
-            <span className="block">PRODUCTION</span>
-            <span className="block">WITHOUT LIMITS</span>
-          </h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 1.4 }}
+            className="text-lg sm:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-10"
+          >
+            Step into Wonderland. Stop being a spectator and start being the hero. Aether uses neuro-haptic VR to transport you into a dreamy, bioluminescent fantasy.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 1.8 }}
+          >
+            <motion.button
+              whileHover={{ scale: 1.05, boxShadow: '0 0 50px rgba(0,240,255,0.4), 0 0 100px rgba(0,240,255,0.2)' }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => document.getElementById('forge')?.scrollIntoView({ behavior: 'smooth' })}
+              className="relative bg-aether-cyan/10 border-2 border-aether-cyan/40 text-aether-cyan font-orbitron font-bold px-10 py-4 rounded-lg text-lg tracking-wider cursor-pointer gentle-animation glow-cyan"
+            >
+              Enter Wonderland
+            </motion.button>
+          </motion.div>
         </div>
-      </motion.div>
+      </div>
 
-
+      {/* Bottom gradient fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent z-30" />
     </div>
   )
 }
