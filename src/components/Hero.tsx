@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import aetherHeadset from '@/assets/aether-headset.png'
 
 export function Hero() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -143,10 +144,24 @@ export function Hero() {
       {/* Hero Content */}
       <div className="absolute inset-0 flex items-center justify-center z-40">
         <div className="text-center max-w-5xl mx-auto px-6">
+          {/* VR Headset Image */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.8, delay: 0.3, ease: 'easeOut' }}
+            className="mb-8"
+          >
+            <img
+              src={aetherHeadset}
+              alt="AETHER VR Headset"
+              className="w-64 sm:w-80 lg:w-96 mx-auto drop-shadow-[0_0_40px_rgba(0,240,255,0.3)]"
+            />
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.8 }}
+            transition={{ duration: 1, delay: 1.2 }}
           >
             <p className="font-orbitron text-aether-cyan/80 text-xs sm:text-sm tracking-[0.5em] uppercase mb-6">
               Neuro-Haptic VR Technology
@@ -156,7 +171,7 @@ export function Hero() {
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, delay: 1 }}
+            transition={{ duration: 1.2, delay: 1.4 }}
             className="text-4xl sm:text-5xl lg:text-7xl xl:text-8xl font-black leading-[0.95] mb-8"
           >
             <span className="block text-foreground">YOUR FAIRYTALE</span>
@@ -175,7 +190,7 @@ export function Hero() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.4 }}
+            transition={{ duration: 1, delay: 1.8 }}
             className="text-lg sm:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed mb-10"
           >
             Step into Wonderland. Stop being a spectator and start being the hero. Aether uses neuro-haptic VR to transport you into a dreamy, bioluminescent fantasy.
@@ -184,7 +199,7 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1.8 }}
+            transition={{ duration: 1, delay: 2.2 }}
           >
             <motion.button
               whileHover={{ scale: 1.05, boxShadow: '0 0 50px rgba(0,240,255,0.4), 0 0 100px rgba(0,240,255,0.2)' }}
